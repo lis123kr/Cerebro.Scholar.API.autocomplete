@@ -3,12 +3,11 @@ import elastic_search
 
 
 def main(event, context):
-    params = event['query']
+    params = event['queryStringParameters']
     result = elastic_search.get(keyword=params["keyword"], size=int(params["size"]), is_suggest=bool(params.get("is_suggested")))
 
     body = {
-        "message": json.dumps(result),
-        "input": event
+        "message": json.dumps(result)
     }
 
     response = {
