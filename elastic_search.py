@@ -11,9 +11,18 @@ def get(keyword, size, is_suggest):
 
 
 def request(keyword, size, is_suggest):
-    URL = 'https://fd2b16254da343159c56f09ad393c420.us-west-1.aws.found.io:9243/tags/words/_search'
+    URL = 'http://113.198.137.239:9200/tags/words/_search'
     headers = {'Accept': 'text/plain', 'Content-type': 'application/json'}
-    result = requests.get(URL, data=json.dumps(query.get(size=size, keyword=keyword, is_suggest=is_suggest)), headers=headers, auth=('elastic', 'Ftkn0jSUxwI867OzNmPiAVeu'))
+
+    http_proxy  = "http://113.198.137.239:8080"
+    https_proxy  = "https://113.198.137.239:8080"
+    proxyDict = { 
+        "http"  : http_proxy,
+        "https" : https_proxy
+     }
+
+    result = requests.post(URL, data=json.dumps(query.get(size=size, keyword=keyword, is_suggest=is_suggest)), 
+        headers=headers, proxies=proxyDict)
 
     if not is_suggest:
         hits = json.loads(result.text)['hits']['hits']
